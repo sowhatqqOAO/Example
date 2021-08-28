@@ -139,6 +139,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\cMultiButtonAttribute.cs" />
     <Compile Include="Migrations\202108280343300_Initial.cs" />
     <Compile Include="Migrations\202108280343300_Initial.designer.cs">
       <DependentUpon>202108280343300_Initial.cs</DependentUpon>
