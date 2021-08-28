@@ -148,6 +148,7 @@
     <Compile Include="Model\Customers.cs" />
     <Compile Include="Model\ETContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModel\VMCustomer.cs" />
     <Compile Include="ViewModel\VMLogin.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -4132,7 +4133,7 @@
     <Content Include="Views\Shared\_Sidebar.cshtml" />
     <Content Include="Views\Login\Index.cshtml" />
     <Content Include="Views\Member\List.cshtml" />
-    <Content Include="Views\Member\Detail.cshtml" />
+    <Content Include="Views\Member\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

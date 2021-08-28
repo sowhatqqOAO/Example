@@ -1,4 +1,4 @@
-﻿@model IPagedList<Example2.Model.Customers>
+﻿@model IPagedList<Example2.ViewModel.VMCustomer>
 @using PagedList;
 @using PagedList.Mvc;
 @section styles
@@ -8,6 +8,7 @@
 
 @using (Html.BeginForm("List", "Member", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
+    @Html.AntiForgeryToken()
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
@@ -42,7 +43,7 @@
                                 <table class="table table-hover">
                                     <tr>
                                         <th>修改</th>
-                                        <th>排序</th>
+                                        <th>刪除</th>
                                         <th>@Html.DisplayNameFor(model => model.First().CustomerID)</th>
                                         <th>@Html.DisplayNameFor(model => model.First().CompanyName)</th>
                                         <th>@Html.DisplayNameFor(model => model.First().ContactName)</th>
@@ -60,6 +61,9 @@
                                         <tr>
                                             <td>
                                                 <button type="submit" name="Details:Edit:@item.CustomerID" value="Details" class="btn btn-default btn-rounded btn-condensed btn-sm" onclick="this.form.action='@Url.Action("Details", ViewContext.RouteData.Values)'"><span class="fa fa-edit"></span></button>
+                                            </td>
+                                            <td>
+                                                <button type="submit" name="Delete:@item.CustomerID" value="Details" class="btn btn-default btn-rounded btn-condensed btn-sm" onclick="this.form.action='@Url.Action("List", ViewContext.RouteData.Values)'"><span class="fa fa-warning"></span></button>
                                             </td>
                                             <td>
                                                 @i
