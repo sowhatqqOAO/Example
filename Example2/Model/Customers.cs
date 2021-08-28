@@ -55,11 +55,11 @@ namespace Example2.Model
         [MaxLength(15)]//欄位長度
         public string Country { get; set; }
 
-        [DisplayName("自訂功能別代號")]//欄位名稱
+        [DisplayName("聯絡電話")]//欄位名稱
         [MaxLength(24)]//欄位長度
         public string Phone { get; set; }
 
-        [DisplayName("自訂功能別代號")]//欄位名稱
+        [DisplayName("傳真號碼")]//欄位名稱
         [MaxLength(24)]//欄位長度
         public string Fax { get; set; }
     }

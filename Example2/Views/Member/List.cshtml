@@ -1,1 +1,96 @@
-﻿
+﻿@model IPagedList<Example2.Model.Customers>
+@using PagedList;
+@using PagedList.Mvc;
+@section styles
+    {
+    <link href="~/Content/PagedList.css" rel="stylesheet" />
+}
+
+@using (Html.BeginForm("List", "Member", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                客戶管理
+            </h1>
+        </section>
+
+        <section class="content">
+            <button type="submit" name="Details:New:-1" value="Details" class="btn btn-danger" onclick="this.form.action='@Url.Action("Details", ViewContext.RouteData.Values)'">新增</button>
+            <!-- /.row -->
+            <div class="row">
+                &nbsp
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <div class="box-header">
+                            <div class="box-tools">
+                            </div>
+                        </div>
+                        <!-- /.box-header -->
+                        @if (Model != null)
+                        {
+                            int i = 0;
+                            if (!string.IsNullOrEmpty(Request.QueryString["page"]))
+                            {
+                                i = (Convert.ToInt32(Request.QueryString["page"]) - 1) * 10 + i;
+                            }
+                            <div class="box-body table-responsive no-padding">
+                                <table class="table table-hover">
+                                    <tr>
+                                        <th>修改</th>
+                                        <th>排序</th>
+                                        <th>@Html.DisplayNameFor(model => model.First().CustomerID)</th>
+                                        <th>@Html.DisplayNameFor(model => model.First().CompanyName)</th>
+                                        <th>@Html.DisplayNameFor(model => model.First().ContactName)</th>
+                                        <th>@Html.DisplayNameFor(model => model.First().ContactTitle)</th>
+                                        <th>@Html.DisplayNameFor(model => model.First().Address)</th>
+                                        <th>@Html.DisplayNameFor(model => model.First().City)</th>
+                                        <th>@Html.DisplayNameFor(model => model.First().Region)</th>
+                                        <th>@Html.DisplayNameFor(model => model.First().PostalCode)</th>
+                                        <th>@Html.DisplayNameFor(model => model.First().Country)</th>
+                                        <th>@Html.DisplayNameFor(model => model.First().Phone)</th>
+                                        <th>@Html.DisplayNameFor(model => model.First().Fax)</th>
+                                    </tr>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <button type="submit" name="Details:Edit:@item.CustomerID" value="Details" class="btn btn-default btn-rounded btn-condensed btn-sm" onclick="this.form.action='@Url.Action("Details", ViewContext.RouteData.Values)'"><span class="fa fa-edit"></span></button>
+                                            </td>
+                                            <td>
+                                                @i
+                                            </td>
+                                            <td>@item.CustomerID</td>
+                                            <td>@item.CompanyName</td>
+                                            <td>@item.ContactName</td>
+                                            <td>@item.ContactTitle</td>
+                                            <td>@item.Address</td>
+                                            <td>@item.City</td>
+                                            <td>@item.Region</td>
+                                            <td>@item.PostalCode</td>
+                                            <td>@item.Country</td>
+                                            <td>@item.Phone</td>
+                                            <td>@item.Fax</td>
+                                        </tr>
+                                        i++;
+                                    }
+                                </table>
+                            </div>
+                        }
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+                </div>
+            </div>
+            @if (Model != null)
+            {
+                @Html.PagedListPager(Model, page => Url.Action("List", new { page }))
+            }
+        </section>
+    </div>
+    <!-- /.content-wrapper -->
+}
