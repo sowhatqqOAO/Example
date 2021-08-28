@@ -16,7 +16,7 @@ namespace Example2.Model
         /// 初始化：name=>WebConfig 資料庫連線字串名稱
         /// </summary>
         public ETContext() : base("name=DefaultConnectionString") { }
-        //public DbSet<Sys_Module> Sys_Module { get; set; }//模組
+        public DbSet<Customers> Customers { get; set; }//北風客戶資料
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
