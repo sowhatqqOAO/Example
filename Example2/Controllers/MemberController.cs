@@ -15,10 +15,10 @@ namespace Example2.Controllers
     {
         private int ipageSize = 10;//預設每頁的最大顯示筆數
         cCustom cCustom = new cCustom();
-        public ActionResult List(int? page)
+        public ActionResult List(int? ipage)
         {
             DataTable dt = cCustom.fnGetCustom(null);
-            var pageNumeber = page ?? 1;
+            var pageNumeber = ipage ?? 1;
             List<Customers> lCustomers = new List<Customers>();
 			if (dt != null && dt.Rows.Count > 0)
 			{

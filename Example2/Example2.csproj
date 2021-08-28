@@ -4132,6 +4132,7 @@
     <Content Include="Views\Shared\_Sidebar.cshtml" />
     <Content Include="Views\Login\Index.cshtml" />
     <Content Include="Views\Member\List.cshtml" />
+    <Content Include="Views\Member\Detail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
