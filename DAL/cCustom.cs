@@ -25,6 +25,7 @@ namespace DAL
             SqlConnection con = new SqlConnection(sCon);
             try
             {
+                con.Open();//開啟資料庫讀取
                 #region 抓取資料
                 string sSql = @"select * from Customers ";
                 if (dWhere != null && dWhere.Count > 0)
@@ -35,7 +36,6 @@ namespace DAL
                         sSql += " and " + kvp.Key + "=@" + kvp.Key;
                     }
                 }
-                con.Open();//開啟資料庫讀取
                 SqlCommand command = new SqlCommand(sSql, con);
                 if (dWhere != null && dWhere.Count > 0)
                 {
@@ -44,7 +44,6 @@ namespace DAL
                         command.Parameters.AddWithValue("@" + kvp.Key, kvp.Value);
                     }
                 }
-                
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
                     if (reader.HasRows)
@@ -56,8 +55,8 @@ namespace DAL
                         reader.Close();//關閉讀取資料庫資料的元件
                     }
                 }
-                #endregion
                 con.Close(); //關閉資料庫 
+                #endregion
             }
             catch (Exception e)
             {
@@ -70,6 +69,105 @@ namespace DAL
             }
 
             return dt;
+        }
+        #endregion
+
+        #region Insert
+        public int fnInsertCustom(Dictionary<string, object> dParmater)
+        {
+            int iReturn = 0;
+            if (dParmater != null && dParmater.Count > 0)
+            {
+                SqlConnection con = new SqlConnection(sCon);
+                try
+                {
+                    using (SqlCommand command = con.CreateCommand())
+                    {
+                        con.Open();
+                        List<string> lColum = new List<string>();
+                        string sSql = @"Insert into Customers "; 
+                        if (dParmater != null && dParmater.Count > 0)
+                        {
+                            foreach (KeyValuePair<string, object> kvp in dParmater)
+                            {
+                                lColum.Add(kvp.Key);
+                                command.Parameters.AddWithValue("@" + kvp.Key, kvp.Value);
+                            }
+                        }
+                        sSql = sSql + "(" + string.Join(",", lColum) + ")";
+                        sSql = sSql+ " Values " + "(@" + string.Join(",@", lColum) + ")";
+                        command.CommandText = sSql;
+                        iReturn = Convert.ToInt32(command.ExecuteNonQuery());
+                        con.Close();
+                    }
+
+                }
+                catch (Exception e)
+                {
+
+                }
+                finally
+                {
+                    con.Dispose();
+                    con.Close(); //關閉資料庫連線
+                }
+            }
+            return iReturn;
+        }
+        #endregion
+
+        #region Update
+        public int fnUpdateCustom(Dictionary<string, object> dParmater,Dictionary<string, object> dWhere)
+        {
+            int iReturn = 0;
+            if (dParmater != null && dParmater.Count > 0)
+            {
+                SqlConnection con = new SqlConnection(sCon);
+                try
+                {
+                    using (SqlCommand command = con.CreateCommand())
+                    {
+                        con.Open();
+                        List<string> lColum = new List<string>();
+                        List<string> lWhere = new List<string>();
+                        string sSql = @"Update Customers SET ";
+                        if (dParmater != null && dParmater.Count > 0)
+                        {
+                            foreach (KeyValuePair<string, object> kvp in dParmater)
+                            {
+                                lColum.Add(kvp.Key +"=@" + kvp.Key);
+                                command.Parameters.AddWithValue("@" + kvp.Key, kvp.Value);
+                            }
+                            sSql = sSql + string.Join(",", lColum);
+                        }
+                        
+                        if (dWhere != null && dWhere.Count > 0)
+                        {
+                            foreach (KeyValuePair<string, object> kvpWhere in dWhere)
+                            {
+                                lWhere.Add(kvpWhere.Key + "=@" + kvpWhere.Key);
+                                command.Parameters.AddWithValue("@" + kvpWhere.Key, kvpWhere.Value);
+                            }
+                            sSql = sSql +" Where "+ string.Join(" and ", lWhere);
+                        }
+                        
+                        command.CommandText = sSql;
+                        iReturn = Convert.ToInt32(command.ExecuteNonQuery());
+                        con.Close();
+                    }
+
+                }
+                catch (Exception e)
+                {
+
+                }
+                finally
+                {
+                    con.Dispose();
+                    con.Close(); //關閉資料庫連線
+                }
+            }
+            return iReturn;
         }
         #endregion
 

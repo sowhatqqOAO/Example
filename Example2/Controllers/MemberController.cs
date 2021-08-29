@@ -99,6 +99,108 @@ namespace Example2.Controllers
             }
             return View(oVMCustomer);
         }
+        #region Details存檔
+
+        /// <summary>
+        /// Details儲存事件
+        /// </summary>
+        /// <param name="oVMCustomer">資料庫Model</param>
+        /// <param name="sModel">編輯模式通常：New | Edit</param>
+        /// <param name="sPk">Key</param>
+        /// <returns>View</returns>
+        [HttpPost]
+        [cMultiButton(m_sName = "Save", m_sArgument1 = "sModel", m_sArgument2 = "sPk")]
+        [ValidateAntiForgeryToken]
+        public ActionResult Details(VMCustomer oVMCustomer, string sModel, string sPk)
+        {
+            bool bAction = false;
+            ViewBag.Model = sModel;
+            ViewBag.Key = sPk;
+            #region 移除不需要參數
+            ControllerContext.RouteData.Values.Remove("sModel");
+            ControllerContext.RouteData.Values.Remove("sPk");
+            #endregion
+
+            #region Return View 參數(先定義避免是NullV，View會出錯)
+            if (oVMCustomer == null)
+            {
+                oVMCustomer = new VMCustomer();
+            }
+            #endregion
+
+            if (ModelState.IsValid)
+            {
+                int iDBControl = 0;
+                Dictionary<string, object> dParame = new Dictionary<string, object>();
+                dParame.Add("CompanyName", oVMCustomer.CompanyName);
+                dParame.Add("ContactName", oVMCustomer.ContactName);
+                dParame.Add("ContactTitle", oVMCustomer.ContactTitle);
+                dParame.Add("Address", oVMCustomer.Address);
+                dParame.Add("City", oVMCustomer.City);
+                dParame.Add("Region", oVMCustomer.Region);
+                dParame.Add("PostalCode", oVMCustomer.PostalCode);
+                dParame.Add("Country", oVMCustomer.Country);
+                dParame.Add("Phone", oVMCustomer.Phone);
+                dParame.Add("Fax", oVMCustomer.Fax);
+
+                switch (sModel)
+                {
+                    case "New":
+                        dParame.Add("CustomerID", oVMCustomer.CustomerID);
+                        iDBControl = cCustom.fnInsertCustom(dParame);
+                        break;
+                    case "Edit":
+                        Dictionary<string, object> dWhere = new Dictionary<string, object>();
+                        dWhere.Add("CustomerID", oVMCustomer.CustomerID);
+                        iDBControl = cCustom.fnUpdateCustom(dParame, dWhere);
+                        break;
+                }
+
+                if (iDBControl <= 0)
+                {
+                    this.TempData["AlertError"] = "資料庫更新失敗";
+                }
+                else
+                {
+                    bAction = true;
+
+                    switch (sModel)
+                    {
+                        case "New":
+                            this.TempData["AlertInfo"] = "新增完成";
+                            break;
+                        case "Edit":
+                            this.TempData["AlertInfo"] = "更新完成";
+                            break;
+                    }
+                }
+            }
+            else
+            {
+                #region 將所有錯誤訊息列出
+                foreach (string sValue in ModelState.Keys)
+                {
+                    if (ModelState[sValue].Errors.Count > 0)
+                    {
+                        this.TempData["AlertError"] += ModelState[sValue].Errors[0].ErrorMessage + "<br/>";
+                    }
+                }
+                #endregion
+            }
+
+            if (bAction)
+            {
+                //成功導頁
+                return this.RedirectToAction("List", ControllerContext.RouteData.Values);
+            }
+            else
+            {
+                //失敗停留
+                return this.View(oVMCustomer);
+            }
+        }
+        #endregion
+
         #endregion
 
         #region Delete
