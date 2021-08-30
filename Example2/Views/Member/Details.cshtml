@@ -24,8 +24,16 @@
                             <div class="box-body">
                                 <div class="form-group">
                                     <label>@Html.LabelFor(model => model.CustomerID)</label>
-                                    @Html.TextBoxFor(model => model.CustomerID, new { @class = "form-control" })
-                                    @Html.ValidationMessageFor(model => model.CustomerID, "", new { @class = "text-danger" })
+                                    @if (ViewBag.Model == "New")
+                                    {
+                                        @Html.TextBoxFor(model => model.CustomerID, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.CustomerID, "", new { @class = "text-danger" })
+                                    }
+                                    else
+                                    {
+                                        <label>@Model.CustomerID</label>
+                                        @Html.TextBoxFor(model => model.CustomerID, new { @class = "form-control",@style="display:none" })
+                                    }
                                 </div>
                                 <div class="form-group">
                                     <label>@Html.LabelFor(model => model.CompanyName)</label>
